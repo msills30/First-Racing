@@ -6,7 +6,9 @@ public class UIManager : MonoBehaviour
 
     public static UIManager instance;
 
-    public TMP_Text lapCounterText, bestLapTimeText, currentLapTimeText;
+    public TMP_Text lapCounterText, bestLapTimeText, currentLapTimeText, currentPlaceText, countDownText, goText, raceResultText;
+
+    public GameObject resultScreen;
 
     private void Awake()
     {
@@ -16,12 +18,18 @@ public class UIManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+
+    public void ExitRace()
+    {
+        RaceManager.instance.ExitRace();
+    }
+
 }
