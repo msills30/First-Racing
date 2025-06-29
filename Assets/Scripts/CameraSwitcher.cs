@@ -1,14 +1,25 @@
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class CameraSwitcher : MonoBehaviour
 {
+    public static CameraSwitcher instance;
 
     public GameObject[] cameras;
     private int currentCam;
+
+    public CameraController topDownCamera;
+    public CinemachineCamera cineCam;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -35,5 +46,12 @@ public class CameraSwitcher : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetTarget(CarController playerCar)
+    {
+        topDownCamera.target = playerCar;
+        cineCam.Follow = playerCar.transform;
+        cineCam.LookAt = playerCar.transform;
     }
 }

@@ -45,6 +45,11 @@ public class RaceManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+        totalLaps = RaceInfoManager.instance.numOfLaps;
+        aiNumberToSpawn = RaceInfoManager.instance.numOfAI;
+
+
         for (int i = 0; i < allCheckPoints.Length; i++)
         {
             allCheckPoints[i].cpNumber = i;
@@ -59,8 +64,16 @@ public class RaceManager : MonoBehaviour
 
         playerStartPosition = Random.Range(0, aiNumberToSpawn + 1);
 
-        playerCar.transform.position = startPoints[playerStartPosition].position;
-        playerCar.theRB.position = startPoints[playerStartPosition].position;
+
+        playerCar = Instantiate(RaceInfoManager.instance.racerToUse, startPoints[playerStartPosition].position, startPoints[playerStartPosition].rotation);
+        playerCar.isAI = false;
+        //the audio listener is turned off so we need to turn it back on.
+        playerCar.GetComponent<AudioListener>().enabled = true;
+
+        CameraSwitcher.instance.SetTarget(playerCar);
+
+        //playerCar.transform.position = startPoints[playerStartPosition].position;
+        //playerCar.theRB.position = startPoints[playerStartPosition].position;
 
         for (int i = 0; i < aiNumberToSpawn + 1; i++)
         {
@@ -77,6 +90,7 @@ public class RaceManager : MonoBehaviour
 
             }
         }
+        UIManager.instance.currentPlaceText.text = (playerStartPosition + 1) + "";
 
     }
 
@@ -137,7 +151,7 @@ public class RaceManager : MonoBehaviour
                 posCheckCounter = timeInBetweenPosCheck;
 
 
-                UIManager.instance.currentPlaceText.text = playerPosition + "";
+                UIManager.instance.currentPlaceText.text = playerPosition + "" ;
             }
 
             //Manage Rubber Band, slow down or speed up cars depending on whose winning.
@@ -171,6 +185,16 @@ public class RaceManager : MonoBehaviour
         {
             case 1:
                 UIManager.instance.raceResultText.text = "You're in " + playerPosition + "st place";
+
+                if (RaceInfoManager.instance.trackToUnlock != "")
+                {
+                    if (!PlayerPrefs.HasKey(RaceInfoManager.instance.trackToUnlock + "_unlocked"))
+                    {
+                    PlayerPrefs.SetInt(RaceInfoManager.instance.trackToUnlock + "_unlocked", 1);
+                    UIManager.instance.trackUnlockedMessage.SetActive(true);
+                    }
+
+                }
                 break;
 
             case 2:
